@@ -143,6 +143,62 @@ def _get_stock_history(
         }
 
 
+def _compare_stocks(
+    symbol1: str,
+    symbol2: str
+) -> Dict[str, Any]:
+    """Compare two stocks side-by-side.
+
+    Args:
+        symbol1: First stock symbol (e.g., 'AAPL')
+        symbol2: Second stock symbol (e.g., 'MSFT')
+
+    Returns:
+        Dictionary with comparison data for both stocks
+    """
+    try:
+        data1 = _get_stock_price(symbol1)
+        data2 = _get_stock_price(symbol2)
+        info1 = _get_company_info(symbol1)
+        info2 = _get_company_info(symbol2)
+
+        def _format_market_cap(cap) -> str:
+            if cap is None:
+                return "N/A"
+            if cap >= 1_000_000_000_000:
+                return f"{cap / 1_000_000_000_000:.1f}T"
+            if cap >= 1_000_000_000:
+                return f"{cap / 1_000_000_000:.1f}B"
+            return f"{cap / 1_000_000:.1f}M"
+
+        return {
+            "comparison": {
+                "symbol1": symbol1.upper(),
+                "symbol2": symbol2.upper(),
+                "stock1": {
+                    "symbol": symbol1.upper(),
+                    "current_price": data1.get("current_price"),
+                    "company_name": data1.get("name", symbol1.upper()),
+                    "market_cap": _format_market_cap(info1.get("market_cap")),
+                    "change_percent": data1.get("change_percent"),
+                    "currency": data1.get("currency", "USD"),
+                },
+                "stock2": {
+                    "symbol": symbol2.upper(),
+                    "current_price": data2.get("current_price"),
+                    "company_name": data2.get("name", symbol2.upper()),
+                    "market_cap": _format_market_cap(info2.get("market_cap")),
+                    "change_percent": data2.get("change_percent"),
+                    "currency": data2.get("currency", "USD"),
+                },
+            }
+        }
+
+    except Exception as e:
+        logger.error(f"Error comparing stocks {symbol1} and {symbol2}: {e}")
+        return {"error": str(e), "symbol1": symbol1.upper(), "symbol2": symbol2.upper()}
+
+
 def _get_company_info(
     ticker: str
 ) -> Dict[str, Any]:
@@ -230,6 +286,25 @@ STOCK_TOOLS = [
             "required": ["ticker"]
         },
         "function": _get_company_info
+    },
+    {
+        "name": "compare_stocks",
+        "description": "Compare two stocks side-by-side. Use this when the user asks to compare two stocks, asks which is better between two companies, or wants a direct comparison of two ticker symbols.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "symbol1": {
+                    "type": "string",
+                    "description": "First stock ticker symbol to compare (e.g., AAPL, TSLA, MSFT)"
+                },
+                "symbol2": {
+                    "type": "string",
+                    "description": "Second stock ticker symbol to compare (e.g., AAPL, TSLA, MSFT)"
+                }
+            },
+            "required": ["symbol1", "symbol2"]
+        },
+        "function": _compare_stocks
     }
 ]
 

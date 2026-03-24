@@ -139,17 +139,17 @@ Microsoft currently has a higher stock price and larger market capitalization th
 ## Verification Checklist
 
 Before submitting, verify:
-- [ ] Function `_compare_stocks()` is implemented and placed at top of file
-- [ ] Tool schema is added to `STOCK_TOOLS` list
-- [ ] Tool has clear description that helps the LLM understand when to use it
-- [ ] Both parameters are marked as required in the schema
-- [ ] Error handling for invalid stock symbols
-- [ ] Code follows project standards (type hints, docstrings)
-- [ ] Tested with at least 2 different stock comparisons
-- [ ] Multi-turn conversation works (agent remembers context)
-- [ ] Test output saved: `output1.txt` (AAPL vs MSFT comparison)
-- [ ] Test output saved: `output2.txt` (TSLA vs F comparison)
-- [ ] Test output saved: `output3.txt` (multi-turn conversation test)
+- [X] Function `_compare_stocks()` is implemented and placed at top of file
+- [X] Tool schema is added to `STOCK_TOOLS` list
+- [X] Tool has clear description that helps the LLM understand when to use it
+- [X] Both parameters are marked as required in the schema
+- [X] Error handling for invalid stock symbols
+- [X] Code follows project standards (type hints, docstrings)
+- [X] Tested with at least 2 different stock comparisons
+- [X] Multi-turn conversation works (agent remembers context)
+- [X] Test output saved: `output1.txt` (AAPL vs MSFT comparison)
+- [X] Test output saved: `output2.txt` (TSLA vs F comparison)
+- [X] Test output saved: `output3.txt` (multi-turn conversation test)
 
 ## Testing Commands
 
